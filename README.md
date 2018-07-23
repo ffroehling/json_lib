@@ -11,7 +11,7 @@ Feel free to use it for anything u want.
 - Portable
 
 ## Disadvantages (Work to do)
-- No true/false supported yet (as i didn't need it till now) - i will include this asap
+- A JSON-List is just supported with JSON-Objects inside yet - i will fix this in future
 - Not optimized for anything
 - Just basic tests yet
 - Access to values isn't perfect yet (as many checks to NULL). Best to write some wrappers for this
