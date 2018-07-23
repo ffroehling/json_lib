@@ -1,16 +1,16 @@
 # json_lib
 A simple and portable JSON-Parser written in C
 
-#Description
+## Description
 This is a simple JSON-Parser written in C. I wrote this because i needed a simple parser without dependencies on a MC. 
 Feel free to use it for anything u want.
 
-#Advantages
+## Advantages
 - Simple to use (just a few lines of code)
 - No additional dependencies
 - Portable
 
-#Disadvantages (Work to do)
+## Disadvantages (Work to do)
 - No true/false supported yet (as i didn't need it till now) - i will include this asap
 - Not optimized for anything
 - Just basic tests yet
@@ -19,7 +19,7 @@ Feel free to use it for anything u want.
 
 Feel free to improve anything you want.
 
-#Usage:
+## Usage:
 You need to add the files in json directory to your project.
 You also need to include the header file "json.h"
 
@@ -33,7 +33,7 @@ Be aware: The file example.c DOES NOT work even if it compiles. It will result i
 I wanted to keep the example as simple as possible, but still providing all necessary information and therefore just included the code-examples without additional checks or sth like that.
 If u wonder why there is a coredump: It is because there is an iteration over the json_arr which in fact is NULL (due to an object as input).
 
-# Author
+## Author
 Felix Froehling <felix.froehling1@gmail.com>
 
 
