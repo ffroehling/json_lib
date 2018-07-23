@@ -31,8 +31,11 @@ KEYVALUE* getEntry(){
     entry->key = NULL;
     entry->stringvalue = NULL;
     entry->intvalue = NULL;
+    entry->is_bool = 0;
+    entry->bool_value = 0;
     entry->json_obj = NULL;
     entry->json_arr = NULL;
+    
     entry->is_null = 0;
     return entry;
 }
@@ -167,8 +170,18 @@ KEYVALUE* parseKV(char* string){
 
     //Read Value
     following = skipspaces(following + 1);
-    if(strlen(following) == 4 && (strncmp(following, "null", 4) == 0)){
-        kv->is_null = 1;
+    if(strlen(following) == 4){
+        if(strncmp(following, "null", 4) == 0){
+            kv->is_null = 1;
+        }
+        else if (strncmp(following, "true", 4) == 0){
+            kv->is_bool = 1;
+            kv->bool_value = 1;
+        }
+    }
+    else if(strlen(following) == 5 && strncmp(following, "false", 5) == 0){
+        kv->is_bool = 1;
+        kv->bool_value = 0;
     }
     else if(following[0] == STRING_OPEN){
         //String value
@@ -241,7 +254,15 @@ void outputJsonObject(JSON_OBJECT* obj){
         if(kv->is_null == 1){
             printf("NULL\n");
         }
-        if(kv->stringvalue != NULL){
+        else if(kv->is_bool){
+            if(kv->bool_value){
+                printf("TRUE\n");
+            }
+            else{
+                printf("FALSE\n");
+            }
+        }
+        else if(kv->stringvalue != NULL){
             printf("%s\n", kv->stringvalue);
         }
         else if(kv->intvalue != NULL){
@@ -308,12 +329,12 @@ void freeJsonArray(JSON_ARRAY* arr){
 JSON_OBJECT* parseObject(char* string){
     string = skipspaces(string);
     string = removetrailingspaces(string);
-
+  
     if(string[0] != OBJECT_OPEN || string[strlen(string) - 1] != OBJECT_CLOSE){
         //INVALID OBJECT
         return NULL;
     }
-
+   
     //Ignore first and last character of string
     string[strlen(string) -1] = '\0';
     string++;
@@ -385,6 +406,18 @@ JSON_ARRAY* parseArray(char* string){
 }
 
 int parse(char* string, JSON_OBJECT** result_obj, JSON_ARRAY** result_arr){
+    if(string == NULL){
+        return 0;
+    }
+
+    char* work = malloc(strlen(string) * sizeof(char));
+    if(work == NULL){
+        //Malloc failed
+        exit(1);
+    }
+
+    strncpy(work, string, strlen(string));
+
     //Init
     (*result_obj) = NULL;
     (*result_arr) = NULL;
@@ -393,15 +426,18 @@ int parse(char* string, JSON_OBJECT** result_obj, JSON_ARRAY** result_arr){
     JSON_OBJECT* obj;
     JSON_ARRAY* arr;
     
-    if((obj = parseObject(string)) != NULL){
+    if((obj = parseObject(work)) != NULL){
         (*result_obj) = obj;
+        free(work);
         return 1;
     }
-    else if((arr = parseArray(string)) != NULL){
+    else if((arr = parseArray(work)) != NULL){
         (*result_arr) = arr;
+        free(work);
         return 1;
     }
     else{
+        free(work);
         return 0;
     }
 }

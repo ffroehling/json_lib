@@ -21,6 +21,8 @@ typedef struct keyvalue {
     char* stringvalue;
     int* intvalue;
     int is_null;
+    int is_bool;
+    int bool_value;
     struct json_object *json_obj;
     struct json_array *json_arr;
 } KEYVALUE;
